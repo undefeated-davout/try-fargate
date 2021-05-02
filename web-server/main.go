@@ -1,27 +1,31 @@
 package main
 
 import (
-  "net/http"
-  "github.com/labstack/echo/v4"
-  "github.com/labstack/echo/v4/middleware"
+	"net/http"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-  // Echo instance
-  e := echo.New()
+	// Echo instance
+	e := echo.New()
 
-  // Middleware
-  e.Use(middleware.Logger())
-  e.Use(middleware.Recover())
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-  // Routes
-  e.GET("/", hello)
+	// Routes
+	e.GET("/", hello)
 
-  // Start server
-  e.Logger.Fatal(e.Start(":80"))
+	// Start server
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
 // Handler
 func hello(c echo.Context) error {
-  return c.String(http.StatusOK, "echo server is working!!")
+	return c.JSON(http.StatusOK,
+		map[string]string{
+			"success": "echo server is working!!",
+		})
 }

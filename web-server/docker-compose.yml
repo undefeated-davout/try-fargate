@@ -3,6 +3,6 @@ services:
   app:
     build: .
     volumes:
-      - ./:/go/src/whoisapp
+      - ./:/go/src/web-server
     ports:
-      - "80:80"
+      - "8080:8080"
