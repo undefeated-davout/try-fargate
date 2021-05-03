@@ -4,5 +4,3 @@ services:
     build: .
     volumes:
       - ./:/go/src/sample-task
-    ports:
-      - "8081:8081"

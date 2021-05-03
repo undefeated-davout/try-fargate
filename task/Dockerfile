@@ -1,23 +1,19 @@
 # 本番用の中間ステージ
 FROM golang:1.16.3 as builder
-WORKDIR /go/api
+WORKDIR /go/task
 COPY . .
 ENV GO111MODULE=on
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
 
 # 本番環境用
 FROM alpine:latest as prod
-EXPOSE 8081
-WORKDIR /api
-COPY --from=builder /go/api/ .
+WORKDIR /task
+COPY --from=builder /go/task/ .
 RUN pwd
-CMD ["./sample-task"]
+CMD ["./task"]
 
-# 開発環境用（ホットリロード環境）
+# 開発環境用
 FROM golang:1.16.3 as dev
-EXPOSE 8081
-WORKDIR /go/src/sample-task
+WORKDIR /go/src/task
 COPY . .
-ENV GO111MODULE=on
-RUN go get github.com/pilu/fresh
-CMD ["fresh"]
+CMD ["go", "run", "/go/src/task/main.go"]
