@@ -1,0 +1,14 @@
+linters:
+  disable-all: true
+  enable:
+    - golint
+    - govet
+    - misspell
+    - errcheck
+    - staticcheck
+    - prealloc
+    - ineffassign
+
+linters-settings:
+  errcheck:
+    check-blank: true

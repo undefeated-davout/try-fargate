@@ -1,8 +1,23 @@
-FROM alpine:latest AS build
-RUN apk -U add gcc libc-dev
-COPY hello.c /
-RUN gcc -static -o hello hello.c
+# 本番用の中間ステージ
+FROM golang:1.16.3 as builder
+WORKDIR /go/api
+COPY . .
+ENV GO111MODULE=on
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
 
-FROM scratch AS release
-COPY --from=build /hello /
-CMD ["/hello"]
+# 本番環境用
+FROM alpine:latest as prod
+EXPOSE 8081
+WORKDIR /api
+COPY --from=builder /go/api/ .
+RUN pwd
+CMD ["./sample-task"]
+
+# 開発環境用（ホットリロード環境）
+FROM golang:1.16.3 as dev
+EXPOSE 8081
+WORKDIR /go/src/sample-task
+COPY . .
+ENV GO111MODULE=on
+RUN go get github.com/pilu/fresh
+CMD ["fresh"]

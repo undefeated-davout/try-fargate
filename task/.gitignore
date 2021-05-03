@@ -1,0 +1,9 @@
+/tmp/
+
+# バイナリ
+sample-task
+__debug_bin
+
+# .env
+.env*
+!.env.example
